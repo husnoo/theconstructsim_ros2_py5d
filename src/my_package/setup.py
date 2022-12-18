@@ -1,4 +1,6 @@
 from setuptools import setup
+import os
+from glob import glob
 
 package_name = 'my_package'
 
@@ -14,8 +16,8 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='user',
-    maintainer_email='user@todo.todo',
+    maintainer='somebody very awesome',
+    maintainer_email='user@user.com',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
