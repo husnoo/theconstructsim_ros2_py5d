@@ -32,7 +32,7 @@ def euler_from_quaternion(quaternion):
     return roll, pitch, yaw
 
 
-class TopicQuiz(Node):
+class TopicQuizNode(Node):
 
     def __init__(self):
         super().__init__('topic_quiz_node')
@@ -93,9 +93,9 @@ class TopicQuiz(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    topic_quiz = TopicQuiz()
-    rclpy.spin(topic_quiz)
-    topic_quiz.destroy_node()
+    topic_quiz_node = TopicQuizNode()
+    rclpy.spin(topic_quiz_node)
+    topic_quiz_node.destroy_node()
     rclpy.shutdown()
 
 
