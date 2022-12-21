@@ -46,13 +46,36 @@ class TopicQuiz(Node):
             '/odom',
             self.listener_callback,
             QoSProfile(depth=10, reliability=ReliabilityPolicy.RELIABLE))
+        self.x = None
+        self.y = None
+        self.yaw = None
+        self.step1done = False
 
     def timer_callback(self):
+        if self.x is None or self.y is None or self.yaw is None:
+            return
+
         msg = Twist()
-        msg.linear.x = 0.5
-        msg.angular.z = 0.5
+
+        if self.x < 1 and self.step1done == False:
+            msg.linear.x = 0.5
+            msg.linear.y = 0.
+            msg.angular.z = 0.
+        elif self.y < 0 and self.yaw < np.pi/2.0:
+            self.step1done = True
+            msg.angular.z = 0.1
+        elif self.y < 1.0:
+            msg.linear.x = 0.5
+        else:
+            msg.linear.x = 0.
+            msg.linear.y = 0.
+            msg.angular.z = 0.
+
         self.publisher_.publish(msg)
-        self.get_logger().info('Publishing: "%s"' % msg)
+        #self.get_logger().info('Publishing: "%s"' % msg)
+        self.get_logger().info(
+            '\nx: {:.2f} y: {:.2f} yaw: {:.2f}'.format(
+                self.x, self.y, self.yaw))
 
     def listener_callback(self, msg):
         #self.get_logger().info('I receive: "%s"' % str(msg))
@@ -60,8 +83,12 @@ class TopicQuiz(Node):
         orient = msg.pose.pose.orientation
         quaternion = [orient.x, orient.y, orient.z, orient.w]
         roll, pitch, yaw = euler_from_quaternion(quaternion)
-        self.get_logger().info(
-            'pos: {} roll: {:.2f} pitch: {:.2f} yaw: {:.2f}'.format(pos, roll, pitch, yaw))
+        self.x = pos.x
+        self.y = pos.y
+        self.z = pos.z
+        self.yaw = yaw
+        # self.get_logger().info(
+        #    'pos: {} roll: {:.2f} pitch: {:.2f} yaw: {:.2f}'.format(pos, roll, pitch, yaw))
 
 
 def main(args=None):
