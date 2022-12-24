@@ -8,7 +8,8 @@ class MyActionClient(Node):
 
     def __init__(self):
         super().__init__('my_action_client')
-        self._action_client = ActionClient(self, Move, 'turtlebot3_as')
+        #self._action_client = ActionClient(self, Move, 'turtlebot3_as')
+        self._action_client = ActionClient(self, Move, 'turtlebot3_as_2')
 
     def send_goal(self, seconds):
         goal_msg = Move.Goal()
